@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- acquisition arguments -->
+  <arg name="devarg" default=''/>
+    <!-- recorder arguments -->
+  <arg name="filename" default=''/>
+  <arg name="autostart" default='true'/>
+    
+    <!-- acquisition node -->
+  <node name="acquisition" pkg="rosneuro_acquisition" type="acquisition" output="screen">
+    <param name="~devarg" value="$(arg devarg)"/>
+  </node>
+    <!-- recorder node -->
+  <node name="recorder" pkg="rosneuro_recorder" type="recorder" output="screen">
+    <param name="~filename" value="$(arg filename)"/>
+    <param name="~autostart" value="$(arg autostart)"/>
+  </node>
+
+</launch>

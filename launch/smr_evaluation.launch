@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- acquisition arguments -->
+  <arg name="devarg" default=''/>
+    <!-- recorder arguments -->
+  <arg name="filename" default=''/>
+  <arg name="autostart" default='true'/>
+    <!-- processing arguments -->
+  <arg name="lap_path" default=''/>
+  <arg name="decoder_path" default=''/>
+    <!-- decision making arguments -->
+  <arg name="threshold" default='0.7'/>
+
+    <!-- acquisition node -->
+  <node name="acquisition" pkg="rosneuro_acquisition" type="acquisition" output="screen">
+    <param name="~devarg" value="$(arg devarg)"/>
+  </node>
+    <!-- recorder node -->
+  <node name="recorder" pkg="rosneuro_recorder" type="recorder" output="screen">
+    <param name="~filename" value="$(arg filename)"/>
+    <param name="~autostart" value="$(arg autostart)"/>
+  </node>
+    <!-- processing node -->
+  <node name="smrbci" pkg="rosneuro_processing" type="test_smrbci" output="screen">
+    <param name="~lap_path" value="$(arg lap_path)"/>
+    <param name="~decoder_path" value="$(arg decoder_path)"/>
+  </node>
+    <!-- decision making node -->
+  <node name="integrator" pkg="rosneuro_decisionmaking" type="test_decisionmaking">
+    <param name="~control_thr" value="$(arg threshold)"/>
+  </node>
+    <!-- feedback node -->
+  <node name="smr_feedback" pkg="rosneuro_feedback" type="feedback.py" output="screen">
+    <param name="~window_height" value="384"/>
+    <param name="~window_width" value="512"/>
+    <param name="~window_scale" value="2"/>
+
+    <param name="~protocol_mode" value="1"/>
+
+    <param name="~n_classes" value="2"/>
+    <param name="~n_trials" value="15"/>
+
+    <param name="~threshold" value="$(arg threshold)"/>
+
+    <param name="~timings_begin" value="3000"/>
+    <param name="~timings_fixation" value="3000"/>
+    <param name="~timings_cue" value="1000"/>
+    <param name="~timings_iti" value="1000"/>
+    <param name="~timings_feedback_min" value="4000"/>
+    <param name="~timings_feedback_max" value="5500"/>
+    <param name="~timings_feedback_update" value="10"/>
+    <param name="~timings_boom" value="1000"/>
+    <param name="~timings_end" value="3000"/>
+  </node>
+
+</launch>
