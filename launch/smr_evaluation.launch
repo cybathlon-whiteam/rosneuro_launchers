@@ -9,7 +9,7 @@
   <arg name="lap_path" default=''/>
   <arg name="decoder_path" default=''/>
     <!-- decision making arguments -->
-  <arg name="threshold" default='0.7'/>
+  <arg name="threshold" default='0.7, 0.7'/>
 
     <!-- acquisition node -->
   <node name="acquisition" pkg="rosneuro_acquisition" type="acquisition" output="screen">
