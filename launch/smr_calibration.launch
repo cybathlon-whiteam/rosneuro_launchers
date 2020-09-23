@@ -3,8 +3,19 @@
     <!-- acquisition arguments -->
   <arg name="devarg" default=''/>
     <!-- recorder arguments -->
-  <arg name="filename" default=''/>
   <arg name="autostart" default='true'/>
+
+  <arg name="subject" />
+  <arg name="modality"  value="offline"/>
+  <arg name="task"      default="mi_bhbf"/>
+  <arg name="extra"     default=""/>
+
+
+  <!-- Protocol parameters -->
+  <rosparam param="/protocol/subject"	 subst_value="True">$(arg subject)</rosparam>
+  <rosparam param="/protocol/modality" subst_value="True">$(arg modality)</rosparam>
+  <rosparam param="/protocol/task"	 subst_value="True">$(arg task)</rosparam>
+  <rosparam param="/protocol/extra"	 subst_value="True">$(arg extra)</rosparam>
     
     <!-- acquisition node -->
   <node name="acquisition" pkg="rosneuro_acquisition" type="acquisition" output="screen">
@@ -12,7 +23,6 @@
   </node>
     <!-- recorder node -->
   <node name="recorder" pkg="rosneuro_recorder" type="recorder" output="screen">
-    <param name="~filename" value="$(arg filename)"/>
     <param name="~autostart" value="$(arg autostart)"/>
   </node>
     <!-- feedback node -->

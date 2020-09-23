@@ -5,8 +5,9 @@
 	<arg name="autostart" default='true'/>
 	
 	<!-- processing arguments -->
-	<arg name="lap_path" default='/mnt/data/rosneuro_ws/lapmask.dat'/>			
-	<arg name="decoder_path" default='/mnt/data/rosneuro_ws/classifier.dat'/>	
+	<arg name="lap_path" default='/home/whiteam/.whitk/data/lapmask_16ch_eog12_16.dat'/>
+  	<arg name="decoder_path" default='/mnt/data/rosneuro_data/bettella_cybathlon2020/classifiers/F1_bhbf_20190709_new_fast.smr.dat'/>
+    <!-- decision making arguments -->
 
 	<!-- decision making arguments -->
 	<arg name="omega" default='0.30'/>

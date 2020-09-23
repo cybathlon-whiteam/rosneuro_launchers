@@ -3,13 +3,25 @@
     <!-- acquisition arguments -->
   <arg name="devarg" default=''/>
     <!-- recorder arguments -->
-  <arg name="filename" default=''/>
   <arg name="autostart" default='true'/>
     <!-- processing arguments -->
-  <arg name="lap_path" default=''/>
-  <arg name="decoder_path" default=''/>
+  <arg name="lap_path" default='/home/whiteam/.whitk/data/lapmask_16ch_eog12_16.dat'/>
+  <arg name="decoder_path" default='/mnt/data/rosneuro_data/bettella_cybathlon2020/classifiers/F1_bhbf_20190709_new_fast.smr.dat'/>
     <!-- decision making arguments -->
   <arg name="threshold" default='0.7, 0.7'/>
+
+  <!-- protocol arguments -->
+  <arg name="subject"   default="F1"/>
+  <arg name="modality"  default="online"/>
+  <arg name="task"      default="mi_bhbf"/>
+  <arg name="extra"     default=""/>
+
+
+  <!-- Protocol parameters -->
+  <rosparam param="/protocol/subject"	 subst_value="True">$(arg subject)</rosparam>
+  <rosparam param="/protocol/modality" subst_value="True">$(arg modality)</rosparam>
+  <rosparam param="/protocol/task"	 subst_value="True">$(arg task)</rosparam>
+  <rosparam param="/protocol/extra"	 subst_value="True">$(arg extra)</rosparam>
 
     <!-- acquisition node -->
   <node name="acquisition" pkg="rosneuro_acquisition" type="acquisition" output="screen">
@@ -17,7 +29,6 @@
   </node>
     <!-- recorder node -->
   <node name="recorder" pkg="rosneuro_recorder" type="recorder" output="screen">
-    <param name="~filename" value="$(arg filename)"/>
     <param name="~autostart" value="$(arg autostart)"/>
   </node>
     <!-- processing node -->
@@ -38,7 +49,7 @@
     <param name="~protocol_mode" value="1"/>
 
     <param name="~n_classes" value="2"/>
-    <param name="~n_trials" value="15"/>
+    <param name="~n_trials" value="10"/>
 
     <param name="~threshold" value="$(arg threshold)"/>
 

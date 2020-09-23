@@ -6,11 +6,12 @@
 	<arg name="autostart" default='true'/>
 	
 	<!-- processing arguments -->
-	<arg name="lap_path" default='/mnt/data/rosneuro_ws/lapmask.dat'/>			
-	<arg name="decoder_path" default='/mnt/data/rosneuro_ws/classifier.dat'/>	
+	<!-- processing arguments -->
+	<arg name="lap_path" default='/home/whiteam/.whitk/data/lapmask_16ch_eog12_16.dat'/>
+  	<arg name="decoder_path" default='/mnt/data/rosneuro_data/bettella_cybathlon2020/classifiers/F1_bhbf_20190709_new_fast.smr.dat'/>
 
 	<!-- decision making arguments -->
-	<arg name="omega" default='0.30'/>
+	<arg name="omega" default='0.35'/>
 	<arg name="phi"   default='0.60'/>
 	<arg name="psi"   default='0.10'/>
 	<arg name="chi"   default='1.00'/>
@@ -18,14 +19,14 @@
 	
 	
 	<!-- cybathlon control arguments -->
-	<arg name="server_ip" default='127.0.0.1'/> 
+	<arg name="server_ip" default='192.168.100.50'/> 
 	<arg name="port" default='5555'/>
 	
 	<!-- protocol arguments -->
-	<arg name="subject"   default=""/>
-	<arg name="modality"  default=""/>
-	<arg name="task"      default=""/>
-	<arg name="extra"     default=""/>
+	<arg name="subject"   default="F1"/>
+	<arg name="modality"  default="control"/>
+	<arg name="task"      default="mi_bhbf"/>
+	<arg name="extra"     default="cybathlon"/>
 
 	<!-- Protocol parameters -->
 	<rosparam param="/protocol/subject"	 subst_value="True">$(arg subject)</rosparam>
@@ -81,7 +82,7 @@
   </node>
     <!-- cybathlon control node -->
   <node name="control" pkg="rosneuro_cybathlon" type="control" output="screen">
-    <param name="~reverse_time" value="2000"/>
+    <param name="~reverse_time" value="3000"/>
     <param name="~player" value="1"/>
 
     <param name="~server_ip" value="$(arg server_ip)"/>
