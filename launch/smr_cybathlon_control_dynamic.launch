@@ -88,4 +88,7 @@
     <param name="~port" value="$(arg port)"/>
   </node>
 
+  <!-- decision making reconfigure node -->
+  <node name="reconf_integrator" pkg="rqt_reconfigure" type="rqt_reconfigure" output="screen" />
+
 </launch>
