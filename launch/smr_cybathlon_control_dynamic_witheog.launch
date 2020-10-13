@@ -46,9 +46,12 @@
     <param name="~autostart" value="$(arg autostart)"/>
   </node>
     <!-- processing node -->
-  <node name="smrbci" pkg="rosneuro_processing" type="test_processing" output="screen">
+  <node name="smrbci" pkg="rosneuro_processing" type="test_smrbci" output="screen">
     <param name="~lap_path" value="$(arg lap_path)"/>
     <param name="~decoder_path" value="$(arg decoder_path)"/>
+  </node>
+    <!-- eog node -->
+  <node name="eogbci" pkg="rosneuro_processing" type="test_eogbci" output="screen">
     <param name="~eog_threshold" value="$(arg eog_threshold)"/>
   </node>
     <!-- decision making node -->
@@ -91,7 +94,7 @@
     <param name="~port" value="$(arg port)"/>
   </node>
 
-  <!-- decision making reconfigure node -->
-  <node name="reconf_integrator" pkg="rqt_reconfigure" type="rqt_reconfigure" output="screen" />
+  <!-- rosneuro reconfigure node -->
+  <node name="rosneuro_reconf" pkg="rqt_reconfigure" type="rqt_reconfigure" output="screen" />
 
 </launch>
