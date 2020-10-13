@@ -9,6 +9,7 @@
 	<!-- processing arguments -->
 	<arg name="lap_path" default='/home/whiteam/.whitk/data/lapmask_16ch_eog12_16.dat'/>
   	<arg name="decoder_path" default='/mnt/data/rosneuro_data/bettella_cybathlon2020/classifiers/F1_bhbf_20190709_new_fast.smr.dat'/>
+	<arg name="eog_threshold" default='30.0'/>
 
 	<!-- decision making arguments -->
 	<arg name="omega" default='0.35'/>
@@ -48,6 +49,7 @@
   <node name="smrbci" pkg="rosneuro_processing" type="test_processing" output="screen">
     <param name="~lap_path" value="$(arg lap_path)"/>
     <param name="~decoder_path" value="$(arg decoder_path)"/>
+    <param name="~eog_threshold" value="$(arg eog_threshold)"/>
   </node>
     <!-- decision making node -->
   <node name="integrator" pkg="rosneuro_decisionmaking" type="integrator">
