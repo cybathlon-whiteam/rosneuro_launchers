@@ -10,7 +10,7 @@
     <!-- decision making arguments -->
 
 	<!-- decision making arguments -->
-	<arg name="omega" default='0.30'/>
+	<arg name="omega" default='0.35'/>
 	<arg name="phi"   default='0.60'/>
 	<arg name="psi"   default='0.10'/>
 	<arg name="chi"   default='1.00'/>
@@ -60,7 +60,7 @@
     <param name="~protocol_mode" value="1"/>
 
     <param name="~n_classes" value="2"/>
-    <param name="~n_trials" value="15"/>
+    <param name="~n_trials" value="7"/>
 
     <param name="~threshold" value="$(arg threshold)"/>
 
