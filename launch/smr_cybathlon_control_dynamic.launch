@@ -1,11 +1,15 @@
 <?xml version="1.0"?>
 <launch>
 	
-	<!-- acquisition/recorder arguments -->
-	<arg name="devarg" default=''/>
-	<arg name="autostart" default='true'/>
+	<!-- acquisition arguments -->
+  	<arg name="plugin" default='rosneuro::EGDDevice'/>
+  	<arg name="devarg" default='gtec'/>
+  	<arg name="framerate" default='16'/>
+  	<arg name="samplerate" default='512'/>
+
+    <!-- recorder arguments -->
+  	<arg name="autostart" default='true'/>
 	
-	<!-- processing arguments -->
 	<!-- processing arguments -->
 	<arg name="lap_path" default='/home/whiteam/.whitk/data/lapmask_16ch_eog12_16.dat'/>
   	<arg name="decoder_path" default='/mnt/data/rosneuro_data/bettella_cybathlon2020/classifiers/F1_bhbf_20190709_new_fast.smr.dat'/>
@@ -17,16 +21,19 @@
 	<arg name="chi"   default='1.00'/>
 	<arg name="threshold" default='1.0, 1.0'/>
 	
-	
-	<!-- cybathlon control arguments -->
-	<arg name="server_ip" default='192.168.100.50'/> 
-	<arg name="port" default='5555'/>
-	
-	<!-- protocol arguments -->
-	<arg name="subject"   default="F1"/>
-	<arg name="modality"  default="control"/>
-	<arg name="task"      default="mi_bhbf"/>
-	<arg name="extra"     default="cybathlon"/>
+    <!-- cybathlon control arguments -->
+  	<arg name="server_ip" default='127.0.0.1'/>
+  	<arg name="port" default='5555'/>
+
+  	<!-- cybathlon logger arguments -->
+  	<arg name="logger_ip" default='127.0.0.1'/> 
+  	<arg name="logger_port" default='8053'/>
+
+	<!-- Protocol parameters -->
+  	<arg name="subject" />
+  	<arg name="modality"  value="control"/>
+  	<arg name="task"      default="mi_bhbf"/>
+  	<arg name="extra"     default="cybathlon"/>
 
 	<!-- Protocol parameters -->
 	<rosparam param="/protocol/subject"	 subst_value="True">$(arg subject)</rosparam>
@@ -34,62 +41,76 @@
 	<rosparam param="/protocol/task"	 subst_value="True">$(arg task)</rosparam>
 	<rosparam param="/protocol/extra"	 subst_value="True">$(arg extra)</rosparam>
 
-	<!-- ################################################################## -->
-    <!-- acquisition node -->
-  <node name="acquisition" pkg="rosneuro_acquisition" type="acquisition" output="screen">
-    <param name="~devarg" value="$(arg devarg)"/>
-    <param name="~samplerate" value="512"/>
-  </node>
+ 	<!-- acquisition node -->
+  	<node name="acquisition" pkg="rosneuro_acquisition" type="acquisition" output="screen">
+  	  <param name="~plugin" 	  value="$(arg plugin)"/>
+  	  <param name="~devarg" 	  value="$(arg devarg)"/>
+  	  <param name="~samplerate" value="$(arg samplerate)"/>
+  	  <param name="~framerate"  value="$(arg framerate)"/>
+  	</node>
+
     <!-- recorder node -->
-  <node name="recorder" pkg="rosneuro_recorder" type="recorder" output="screen">
-    <param name="~autostart" value="$(arg autostart)"/>
-  </node>
+  	<node name="recorder" pkg="rosneuro_recorder" type="recorder" output="screen">
+  	  <param name="~autostart" value="$(arg autostart)"/>
+  	</node>
+
     <!-- processing node -->
-  <node name="smrbci" pkg="rosneuro_processing" type="test_smrbci" output="screen">
-    <param name="~lap_path" value="$(arg lap_path)"/>
-    <param name="~decoder_path" value="$(arg decoder_path)"/>
-  </node>
+  	<node name="smrbci" pkg="rosneuro_processing" type="test_smrbci" output="screen">
+  	  <param name="~lap_path" value="$(arg lap_path)"/>
+  	  <param name="~decoder_path" value="$(arg decoder_path)"/>
+  	</node>
+
     <!-- decision making node -->
-  <node name="integrator" pkg="rosneuro_decisionmaking" type="integrator">
-    <param name="~omega" value="$(arg omega)"/>
-    <param name="~phi"	 value="$(arg phi)"/>
-    <param name="~psi" 	 value="$(arg psi)"/>
-    <param name="~chi" 	 value="$(arg chi)"/>
-  </node>
+  	<node name="integrator" pkg="rosneuro_decisionmaking" type="integrator">
+  	  <param name="~omega" value="$(arg omega)"/>
+  	  <param name="~phi"	 value="$(arg phi)"/>
+  	  <param name="~psi" 	 value="$(arg psi)"/>
+  	  <param name="~chi" 	 value="$(arg chi)"/>
+  	</node>
+
     <!-- feedback node -->
-  <node name="smr_feedback" pkg="rosneuro_feedback" type="feedback.py" output="screen">
-    <param name="~window_height" value="384"/>
-    <param name="~window_width" value="512"/>
-    <param name="~window_scale" value="2"/>
-    <param name="~window_title" value="Cybathlon Feedback"/>
+  	<node name="smr_feedback" pkg="rosneuro_feedback" type="feedback.py" output="screen">
+  	  <param name="~window_height" value="384"/>
+  	  <param name="~window_width" value="512"/>
+  	  <param name="~window_scale" value="2"/>
+  	  <param name="~window_title" value="Cybathlon Feedback"/>
 
-    <param name="~protocol_mode" value="2"/>
+  	  <param name="~protocol_mode" value="2"/>
 
-    <param name="~n_classes" value="2"/>
-    <param name="~n_trials" value="15"/>
+  	  <param name="~n_classes" value="2"/>
+  	  <param name="~n_trials" value="15"/>
 
-    <param name="~threshold" value="$(arg threshold)"/>
+  	  <param name="~threshold" value="$(arg threshold)"/>
 
-    <param name="~timings_begin" value="3000"/>
-    <param name="~timings_fixation" value="3000"/>
-    <param name="~timings_cue" value="1000"/>
-    <param name="~timings_iti" value="1000"/>
-    <param name="~timings_feedback_min" value="4000"/>
-    <param name="~timings_feedback_max" value="5500"/>
-    <param name="~timings_feedback_update" value="10"/>
-    <param name="~timings_boom" value="1000"/>
-    <param name="~timings_end" value="3000"/>
-  </node>
+  	  <param name="~timings_begin" value="3000"/>
+  	  <param name="~timings_fixation" value="3000"/>
+  	  <param name="~timings_cue" value="1000"/>
+  	  <param name="~timings_iti" value="1000"/>
+  	  <param name="~timings_feedback_min" value="4000"/>
+  	  <param name="~timings_feedback_max" value="5500"/>
+  	  <param name="~timings_feedback_update" value="10"/>
+  	  <param name="~timings_boom" value="1000"/>
+  	  <param name="~timings_end" value="3000"/>
+  	</node>
+
     <!-- cybathlon control node -->
-  <node name="control" pkg="rosneuro_cybathlon" type="control" output="screen">
-    <param name="~reverse_time" value="3000"/>
-    <param name="~player" value="1"/>
+  	<node name="control" pkg="rosneuro_cybathlon" type="control" output="screen">
+  	  <param name="~reverse_time" value="3000"/>
+  	  <param name="~player" value="1"/>
 
-    <param name="~server_ip" value="$(arg server_ip)"/>
-    <param name="~port" value="$(arg port)"/>
-  </node>
+  	  <param name="~server_ip" value="$(arg server_ip)"/>
+  	  <param name="~port" value="$(arg port)"/>
+  	</node>
+  	
+  	<!-- cybathlon logger node -->
+  	<node name="logger" pkg="rosneuro_cybathlon" type="logger" output="screen">
+  	  <param name="~player" value="1"/>
 
-  <!-- decision making reconfigure node -->
-  <node name="reconf_integrator" pkg="rqt_reconfigure" type="rqt_reconfigure" output="screen" />
+  	  <param name="~server_ip" value="$(arg logger_ip)"/>
+  	  <param name="~port" value="$(arg logger_port)"/>
+  	</node>
+
+  	<!-- decision making reconfigure node -->
+  	<node name="reconf_integrator" pkg="rqt_reconfigure" type="rqt_reconfigure" output="screen" />
 
 </launch>

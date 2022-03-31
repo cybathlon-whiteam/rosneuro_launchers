@@ -1,14 +1,17 @@
 <?xml version="1.0"?>
 <launch>
-	<!-- acquisition/recorder arguments -->
-	<arg name="devarg" default=''/>
+    <!-- acquisition arguments -->
+	<arg name="plugin" default='rosneuro::EGDDevice'/>
+  	<arg name="devarg" default='gtec'/>
+  	<arg name="framerate" default='16'/>
+  	<arg name="samplerate" default='512'/>
+	
+	<!-- recorder arguments -->
 	<arg name="autostart" default='true'/>
 	
 	<!-- processing arguments -->
 	<arg name="lap_path" default='/home/whiteam/.whitk/data/lapmask_16ch_eog12_16.dat'/>
   	<arg name="decoder_path" default='/mnt/data/rosneuro_data/bettella_cybathlon2020/classifiers/F1_bhbf_20190709_new_fast.smr.dat'/>
-	<arg name="eog_threshold" default='30.0'/>
-    <!-- decision making arguments -->
 
 	<!-- decision making arguments -->
 	<arg name="omega" default='0.35'/>
@@ -30,58 +33,63 @@
 	<rosparam param="/protocol/extra"	 subst_value="True">$(arg extra)</rosparam>
 
     <!-- acquisition node -->
-  <node name="acquisition" pkg="rosneuro_acquisition" type="acquisition" output="screen">
-    <param name="~devarg" value="$(arg devarg)"/>
-    <param name="~samplerate" value="512"/>
-  </node>
+	<node name="acquisition" pkg="rosneuro_acquisition" type="acquisition" output="screen">
+  	  <param name="~plugin" 	  value="$(arg plugin)"/>
+  	  <param name="~devarg" 	  value="$(arg devarg)"/>
+  	  <param name="~samplerate" value="$(arg samplerate)"/>
+  	  <param name="~framerate"  value="$(arg framerate)"/>
+  	</node>
+
     <!-- recorder node -->
-  <node name="recorder" pkg="rosneuro_recorder" type="recorder" output="screen">
-    <param name="~autostart" value="$(arg autostart)"/>
-  </node>
+  	<node name="recorder" pkg="rosneuro_recorder" type="recorder" output="screen">
+  	  <param name="~autostart" value="$(arg autostart)"/>
+  	</node>
+
     <!-- processing node -->
-  <node name="smrbci" pkg="rosneuro_processing" type="test_smrbci" output="screen">
-    <param name="~lap_path" value="$(arg lap_path)"/>
-    <param name="~decoder_path" value="$(arg decoder_path)"/>
-  </node>
-      <!-- eog node -->
-  <node name="eogbci" pkg="rosneuro_processing" type="test_eogbci" output="screen">
-    <param name="~eog_threshold" value="$(arg eog_threshold)"/>
-  </node>
+  	<node name="smrbci" pkg="rosneuro_processing" type="test_smrbci" output="screen">
+  	  <param name="~lap_path" value="$(arg lap_path)"/>
+  	  <param name="~decoder_path" value="$(arg decoder_path)"/>
+  	</node>
+	
+	<!-- eog node -->
+  	<node name="eogbci" pkg="rosneuro_processing" type="test_eogbci" output="screen">
+  	  <param name="~eog_threshold" value="$(arg eog_threshold)"/>
+  	</node>
 
     <!-- decision making node -->
-  <node name="integrator" pkg="rosneuro_decisionmaking" type="integrator">
-    <param name="~omega" value="$(arg omega)"/>
-    <param name="~phi"	 value="$(arg phi)"/>
-    <param name="~psi" 	 value="$(arg psi)"/>
-    <param name="~chi" 	 value="$(arg chi)"/>
-  </node>
+  	<node name="integrator" pkg="rosneuro_decisionmaking" type="integrator">
+  	  <param name="~omega" value="$(arg omega)"/>
+  	  <param name="~phi"	 value="$(arg phi)"/>
+  	  <param name="~psi" 	 value="$(arg psi)"/>
+  	  <param name="~chi" 	 value="$(arg chi)"/>
+  	</node>
 
     <!-- feedback node -->
-  <node name="smr_feedback" pkg="rosneuro_feedback" type="feedback.py" output="screen">
-    <param name="~window_height" value="384"/>
-    <param name="~window_width" value="512"/>
-    <param name="~window_scale" value="2"/>
-    <param name="~window_title" value="Evaluation Feedback"/>
+  	<node name="smr_feedback" pkg="rosneuro_feedback" type="feedback.py" output="screen">
+  	  <param name="~window_height" value="384"/>
+  	  <param name="~window_width" value="512"/>
+  	  <param name="~window_scale" value="2"/>
+  	  <param name="~window_title" value="Evaluation Feedback"/>
 
-    <param name="~protocol_mode" value="1"/>
+  	  <param name="~protocol_mode" value="1"/>
 
-    <param name="~n_classes" value="2"/>
-    <param name="~n_trials" value="7"/>
+  	  <param name="~n_classes" value="2"/>
+  	  <param name="~n_trials" value="7"/>
 
-    <param name="~threshold" value="$(arg threshold)"/>
+  	  <param name="~threshold" value="$(arg threshold)"/>
 
-    <param name="~timings_begin" value="3000"/>
-    <param name="~timings_fixation" value="3000"/>
-    <param name="~timings_cue" value="1000"/>
-    <param name="~timings_iti" value="1000"/>
-    <param name="~timings_feedback_min" value="4000"/>
-    <param name="~timings_feedback_max" value="5500"/>
-    <param name="~timings_feedback_update" value="10"/>
-    <param name="~timings_boom" value="1000"/>
-    <param name="~timings_end" value="3000"/>
-  </node>
+  	  <param name="~timings_begin" value="3000"/>
+  	  <param name="~timings_fixation" value="3000"/>
+  	  <param name="~timings_cue" value="1000"/>
+  	  <param name="~timings_iti" value="1000"/>
+  	  <param name="~timings_feedback_min" value="4000"/>
+  	  <param name="~timings_feedback_max" value="5500"/>
+  	  <param name="~timings_feedback_update" value="10"/>
+  	  <param name="~timings_boom" value="1000"/>
+  	  <param name="~timings_end" value="3000"/>
+  	</node>
   
-  <!-- decision making reconfigure node -->
-  <node name="reconf_integrator" pkg="rqt_reconfigure" type="rqt_reconfigure" output="screen" />
+  	<!-- decision making reconfigure node -->
+  	<node name="reconf_integrator" pkg="rqt_reconfigure" type="rqt_reconfigure" output="screen" />
 
 </launch>
